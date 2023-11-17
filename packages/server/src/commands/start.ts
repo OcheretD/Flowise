@@ -27,6 +27,7 @@ export default class Start extends Command {
         LOG_LEVEL: Flags.string(),
         TOOL_FUNCTION_BUILTIN_DEP: Flags.string(),
         TOOL_FUNCTION_EXTERNAL_DEP: Flags.string(),
+        NUMBER_OF_PROXIES: Flags.string(),
         DATABASE_TYPE: Flags.string(),
         DATABASE_PATH: Flags.string(),
         DATABASE_PORT: Flags.string(),
@@ -68,10 +69,15 @@ export default class Start extends Command {
             logger.error('uncaughtException: ', err)
         })
 
+        process.on('unhandledRejection', (err) => {
+            logger.error('unhandledRejection: ', err)
+        })
+
         const { flags } = await this.parse(Start)
 
         if (flags.PORT) process.env.PORT = flags.PORT
         if (flags.DEBUG) process.env.DEBUG = flags.DEBUG
+        if (flags.NUMBER_OF_PROXIES) process.env.NUMBER_OF_PROXIES = flags.NUMBER_OF_PROXIES
 
         // Authorization
         if (flags.FLOWISE_USERNAME) process.env.FLOWISE_USERNAME = flags.FLOWISE_USERNAME
